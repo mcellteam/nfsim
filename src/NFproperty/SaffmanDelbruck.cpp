@@ -11,7 +11,7 @@ void SaffmanDelbruck::getValue(string& value){
 }
 
 double SaffmanDelbruck::getDiffusionValue(){
-    //KB*T*LOG((mu_PM*h/(Rc*(mu_EC+mu_CP)/2))-gamma)/(4*PI*mu_PM*h)
+    //KB*T*LOG((eta_PM*h/(Rc*(eta_EC+eta_CP)/2))-gamma)/(4*PI*eta_PM*h)
     double kb = NFutil::convertToDouble(this->getProperty("kb")->getValue());
     double t =  NFutil::convertToDouble(this->getProperty("temperature")->getValue());
     double rs = NFutil::convertToDouble(this->getProperty("rs")->getValue());

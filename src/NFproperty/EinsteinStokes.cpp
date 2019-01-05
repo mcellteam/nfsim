@@ -19,7 +19,7 @@ double EinsteinStokes::getDiffusionValue(){
     int complexSize = dynamic_cast<Complex*>(this->getContainer())->getComplexSize();
 
     return kb*t/(6*pi*viscosity*rs*cbrt(complexSize));
-    //KB*T/(6*PI*mu_EC*Rs)
-    //KB*T*LOG((mu_PM*h/(Rc*(mu_EC+mu_CP)/2))-gamma)/(4*PI*mu_PM*h)
+    //KB*T/(6*PI*eta_EC*Rs)
+    //KB*T*LOG((eta_PM*h/(Rc*(eta_EC+eta_CP)/2))-gamma)/(4*PI*eta_PM*h)
     return 0;
 }
