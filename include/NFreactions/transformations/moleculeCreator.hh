@@ -24,7 +24,9 @@ namespace NFcore
 		public:
 			MoleculeCreator( shared_ptr<TemplateMolecule>,
 					         MoleculeType *              _molecule_type,
-			                 vector < pair<int,int> > &  _component_states    );
+			                 vector < pair<int,int> > &  _component_states,    
+			                 string _molecule_compartment  //JJT2019
+			                 );
 
 			~MoleculeCreator( );
 
@@ -63,6 +65,8 @@ namespace NFcore
 
 			// non-default component index / state index pairs
 			vector < pair<int,int> >  component_states;
+
+			string molecule_compartment;
 
 		private:
 			vector < pair<int,int> >::iterator   comp_iter;

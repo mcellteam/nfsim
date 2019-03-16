@@ -3847,8 +3847,10 @@ bool NFinput::readProductMolecule(
 		vector < pair <int,int> >  component_states;
 
 
-		//First get the type of molecule and retrieve the moleculeType object from the system
+		//First get the type of molecule and retrieve the moleculeType object from the system.
+		//JJT2019: extract compartment information as well
 		string molName, molUid;
+		string molCompartment;
 
 		if( !pMol->Attribute("name") || !pMol->Attribute("id") )
 		{
@@ -3859,6 +3861,10 @@ bool NFinput::readProductMolecule(
 
 		molName = pMol->Attribute("name");
 		molUid  = pMol->Attribute("id");
+
+		//JJT2019: Retrieving compartment information
+		//XXX: What happens if no compartment information is retrieved?
+		molCompartment = pMol->Attribute("compartment");
 
 
 		//Skip anything that is a null molecule
@@ -4031,7 +4037,7 @@ bool NFinput::readProductMolecule(
 
 
 		// don't forget:  add molecule creator to list
-		moleculeCreatorsList.push_back( new MoleculeCreator( tempmol, moltype, component_states ) );
+		moleculeCreatorsList.push_back( new MoleculeCreator( tempmol, moltype, component_states, molCompartment ) );
 
 		// return the templateMolecule
 		return true;

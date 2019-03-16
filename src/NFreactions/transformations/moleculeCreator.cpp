@@ -12,12 +12,13 @@ using namespace NFcore;
 MoleculeCreator::MoleculeCreator(
 		shared_ptr<TemplateMolecule> _template_molecule,
 		MoleculeType               * _molecule_type,
-		vector < pair <int,int> >  & _component_states   )
+		vector < pair <int,int> >  & _component_states,
+		string _molecule_compartment   )
 {
 	template_molecule = _template_molecule;
 	molecule_type     = _molecule_type;
 	component_states  = _component_states;
-
+	molecule_compartment = _molecule_compartment;
 	// is this a population type molecule?
 	population_type   = molecule_type->isPopulationType();
 
@@ -57,7 +58,7 @@ MoleculeCreator::create()
 		{
 			molecule_object->setComponentState( (*comp_iter).first, (*comp_iter).second );
 		}
-
+		molecule_object->setCompartment(molecule_compartment);
 		//Prep the molecule and enterinto the simulation
 		molecule_type->addMoleculeToRunningSystemButDontUpdate( molecule_object );
 	}
@@ -85,6 +86,7 @@ MoleculeCreator::create_molecule()
 			molecule_object->setComponentState( (*comp_iter).first, (*comp_iter).second );
 		}
 
+		molecule_object->setCompartment(molecule_compartment);
 		//Prep the molecule and enterinto the simulation
 		molecule_type->addMoleculeToRunningSystemButDontUpdate( molecule_object );
 	}
