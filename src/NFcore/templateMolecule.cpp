@@ -49,7 +49,7 @@ TemplateMolecule::TemplateMolecule(MoleculeType * moleculeType){
 	this->hasTraversedDownConnectedTo=new bool[n_connectedTo];
 	this->otherTemplateConnectedToIndex=new int[n_connectedTo];
 	this->connectedToHasRxnCenter=new bool[n_connectedTo];
-
+	this->compartment = "";
 
 
 	//Init symmetric site matchers...
@@ -307,6 +307,7 @@ void TemplateMolecule::printDetails(ostream &o) {
 	o<<"-----------------------------\n";
 	o<<"TemplateMolecule of type:   "<< moleculeType->getName();
 	o<<", with id: "<<this->uniqueTemplateID;
+	o<<"\n  Compartment  "<< this->getCompartmentName();
 
 	o<<"\n  Connected-to:                       ";
 	if(n_connectedTo==0)o<<"none";
@@ -761,7 +762,7 @@ void TemplateMolecule::clearTemplateOnly() {
 bool TemplateMolecule::compare(Molecule *m)
 {
 	// I think we need a 4th argument?  To be safe. --Justin
-	// answer:  we don't have to because the 4th arg of compare() has a default
+	// answer:  we don't have to because the 4th comp of compare() has a default
 	//          value of false, see the header file declaration.  Although we
 	//          still might want to add it here just so that we're clear.  --michael
 	return compare(m,0,0);
@@ -1084,6 +1085,16 @@ bool TemplateMolecule::compare(Molecule *m, ReactantContainer *rc, MappingSet *m
 	//Make sure we are of the same type
 	if(m->getMoleculeType()!=this->moleculeType) {
 		clear(); return false;
+	}
+
+	//JJTV 2.5
+	// cout << "compartments!!! "<<m->getCompartmentName()<<endl;
+	// cout << this->getCompartmentName()<<endl; 
+	if(!this->compartment.empty()){
+		if(m->getCompartmentName() != this->getCompartmentName()){
+			clear();
+			return false;
+		}
 	}
 
 	//cout<<"3!"<<endl;
@@ -2009,7 +2020,14 @@ bool TemplateMolecule::checkSymmetryAroundBond(shared_ptr<TemplateMolecule> tm1,
 }
 
 
+//JJT2019
+void TemplateMolecule::setCompartment(string compartment){
+	this->compartment = compartment;
+}
 
+string TemplateMolecule::getCompartmentName(){
+	return this->compartment;
+}
 
 
 

@@ -128,6 +128,9 @@ namespace NFcore
 		void printPattern();
 		void printPattern(ostream &o);
 
+		//JJTV compartments
+		string getCompartmentName();
+		void setCompartment(string compartment);
 
 
 	protected:
@@ -136,6 +139,9 @@ namespace NFcore
 
 		MoleculeType *moleculeType;
 		int uniqueTemplateID;
+
+		//JJTV2019
+		string compartment;
 
 		// Handling of transformations
 		int n_mapGenerators;

@@ -3111,7 +3111,7 @@ shared_ptr<TemplateMolecule> NFinput::readPattern(
 		for ( pMol = pListOfMol->FirstChildElement("Molecule"); pMol != 0; pMol = pMol->NextSiblingElement("Molecule"))
 		{
 			//First get the type of molecule and retrieve the moleculeType object from the system
-			string molName, molUid;
+			string molName, molUid, molCompartment;
 			if(!pMol->Attribute("name") || ! pMol->Attribute("id")) {
 				cerr<<"!!!Error.  Invalid 'Molecule' tag found when creating pattern '"<<patternName<<"'. Quitting"<<endl;
 				return NULL;
@@ -3119,7 +3119,11 @@ shared_ptr<TemplateMolecule> NFinput::readPattern(
 				molName = pMol->Attribute("name");
 				molUid = pMol->Attribute("id");
 			}
-
+			// JJTV: Get compartment information
+			if(pMol->Attribute("compartment")){
+				molCompartment = pMol->Attribute("compartment");
+	    	}
+			
 
 			//Generate an error for any null or trash molecule
 			if(molName=="Null" || molName=="NULL" || molName=="null") {
@@ -3357,11 +3361,11 @@ shared_ptr<TemplateMolecule> NFinput::readPattern(
 			{
 				tempmol->addBoundComponent(*strVecIter);
 			}
-
-
-
-			//tempmol->printDetails();
-
+			if(!molCompartment.empty()){
+				tempmol->setCompartment(molCompartment);
+			}
+			
+		
 
 			//Update our data storage with the new template and empty out the things we don't need
 			templates.insert(pair <string, shared_ptr<TemplateMolecule>> (molUid,tempmol));
@@ -3864,8 +3868,9 @@ bool NFinput::readProductMolecule(
 
 		//JJT2019: Retrieving compartment information
 		//XXX: What happens if no compartment information is retrieved?
-		molCompartment = pMol->Attribute("compartment");
-
+		if(pMol->Attribute("compartment")){
+			molCompartment = pMol->Attribute("compartment");
+		}
 
 		//Skip anything that is a null molecule
 		if(molName=="Null" || molName=="NULL" || molName=="null")
