@@ -1993,6 +1993,84 @@ bool NFinput::initReactionRules(
 				}
 
 
+				// ASS WE NEED TO TACKLE COMPARTMENT CHANGES
+                                //<ListOfOperations>
+                                //  <ChangeCompartment id="RR1_RP1_M1" source="EC" destination="CP" flipOrientation="0" moveConnected="0"/>
+                                //</ListOfOperations>
+
+				TiXmlElement *pChangeCompartment;
+                                cout << "ALS: I'm reading the change compartment operation! -1" << endl;
+				for ( pChangeCompartment = pListOfOperations->FirstChildElement("ChangeCompartment"); pChangeCompartment != 0; pChangeCompartment = pChangeCompartment->NextSiblingElement("ChangeCompartment"))
+				{
+					//Make sure all the information about the state change is here
+                                        string source, destination;
+                                        cout << "ALS: I'm reading the change compartment operation! -2" << endl;
+                                        if(!pChangeCompartment->Attribute("source") || !pChangeCompartment->Attribute("destination")) {
+                                            cerr<<"A specified compartment change operation in ReactionClass: '"+rxnName+"' does not "<<endl;
+                                            cerr<<"have a valid source or destination attribute.  Quitting."<<endl;
+                                            return false;
+                                        } else {
+                                            source = pChangeCompartment->Attribute("source");
+                                            destination = pChangeCompartment->Attribute("destination");
+                                        }
+
+					//First grab the component that is going to change...
+					//component *c;
+					//int finalStateInt = 0;
+					//if(!lookup(c, site, comps, symMap)) return false;
+
+					////handle both increment and decrement states first...
+					//if(finalState=="PLUS") {
+					//	if(!ts->addIncrementStateTransform(c->t,c->symPermutationName)) return false;
+
+					//	if(verbose) {
+					//		cout<<"\t\t\t***Identified increment state of site: "+c->t->getMoleculeTypeName()+"("+c->symPermutationName;
+					//		cout<<") to new state value: oldStateValue+1"<<endl;
+					//	}
+					//}
+					//else if(finalState=="MINUS") {
+					//	if(!ts->addDecrementStateTransform(c->t,c->symPermutationName)) return false;
+
+					//	if(verbose) {
+					//		cout<<"\t\t\t***Identified decrement state of site: "+c->t->getMoleculeTypeName()+"("+c->symPermutationName;
+					//		cout<<") to new state value: oldStateValue-1"<<endl;
+					//	}
+
+					//}
+					//else {
+
+					//	//Here, we handle your typical state change operation
+					//	try {
+
+					//		string lookupname = c->symPermutationName;
+					//		if(allowedStates.find(c->t->getMoleculeTypeName()+"_"+lookupname+"_"+finalState)==allowedStates.end()) {
+
+					//			//if(c->t->getMoleculeType()->isEquivalentComponent(c->name)) {
+					//			//	lookupname = c->name;
+					//			//}
+					//			//if(allowedStates.find(c->t->getMoleculeTypeName()+"_"+lookupname+"_"+finalState)==allowedStates.end()) {
+					//				cout<<"Error! in NFinput, when looking up state: "<<c->t->getMoleculeTypeName()+"_"+c->symPermutationName+"_"+finalState<<endl;
+					//				cout<<"Could not find this in the list of allowed states!  exiting!"<<endl;
+					//				exit(1);
+					//			//}
+					//		}
+					//		finalStateInt = allowedStates.find(c->t->getMoleculeTypeName()+"_"+lookupname+"_"+finalState)->second;
+					//		//cout<<"found:"<<finalStateInt<<endl;
+					//	} catch (exception& e) {
+					//		cerr<<"Error in adding a state change operation in ReactionClass: '"+rxnName+"'."<<endl;
+					//		cerr<<"It seems that the final state is not valid."<<endl;
+					//		return false;
+					//	}
+					//	if(!ts->addStateChangeTransform(c->t,c->symPermutationName,finalStateInt)) return false;
+					//	if(verbose) {
+					//		cout<<"\t\t\t***Identified state change of site: "+c->t->getMoleculeTypeName()+"("+c->symPermutationName;
+					//		cout<<") to new state value: " + finalState<<endl;
+					//	}
+					//}
+				}
+
+
+
 				//Extract out removal of bonds (Must do this before creation of bonds!  Otherwise
 				//it is possible to add a bond before another was deleted in the same rule!  This
 				//would give you an error!)

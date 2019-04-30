@@ -19,6 +19,26 @@ void StateChangeTransform::apply(Mapping *m, MappingSet **ms)
 	m->getMolecule()->setComponentState(cIndex,newValue);
 }
 
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+// CompartmentChange is a transform type that is required 
+// for reactions where the only change is in the compartments
+// which is what MCell does for transport across membrane.
+// The only thing that's needed is to change the compartment
+// of a molecule from source to destination. 
+//
+// ASS2019
+// /////////////////////////////////////////////////////////////
+ChangeCompartmentTransform::ChangeCompartmentTransform(string newValue) :
+	Transformation(TransformationFactory::CHANGE_COMPARTMENT)
+{
+	this->newValue = newValue;
+}
+void ChangeCompartmentTransform::apply(Mapping *m, MappingSet **ms)
+{
+	m->getMolecule()->setCompartment(newValue);
+}
+
 
 
 ///////////////////////////////////////////////////////////////

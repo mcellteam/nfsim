@@ -160,7 +160,6 @@ namespace NFcore
 			static const unsigned int DECREMENT_STATE = 7;
 
 
-
 			////////////////////////////////
 			/*!	Return a pointer to the transformation that is needed by a local function */
 			static Transformation * genLocalFunctionReference(string PointerName, int type, shared_ptr<TemplateMolecule> tm);
@@ -172,6 +171,10 @@ namespace NFcore
 
 			/*!	Indicates a population decrement transform */
 			static const unsigned int DECREMENT_POPULATION = 10;
+
+			/*!	ASS2019 Indicates a compartment change transformation */
+			static const unsigned int CHANGE_COMPARTMENT = 11;
+
 
 	};
 
@@ -239,6 +242,14 @@ namespace NFcore
 		protected:
 			int cIndex;
 			int newValue;
+	};
+
+	class ChangeCompartmentTransform : public Transformation {
+		public:
+			ChangeCompartmentTransform(string newValue);
+			virtual void apply(Mapping *m, MappingSet **ms);
+		protected:
+			string newValue;
 	};
 
 	class BindingTransform : public Transformation {
