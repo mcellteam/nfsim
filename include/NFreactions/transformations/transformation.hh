@@ -250,9 +250,11 @@ namespace NFcore
 		public:
 			ChangeCompartmentTransform(string newCompartmentValue);
 			virtual void apply(Mapping *m, MappingSet **ms);
+			virtual int getComponentIndex() const { return -1; };
 		protected:
 			string newCompartmentValue;
 	};
+	// ASS2019
 
 	class BindingTransform : public Transformation {
 		public:
