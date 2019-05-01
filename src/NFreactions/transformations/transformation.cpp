@@ -23,20 +23,21 @@ void StateChangeTransform::apply(Mapping *m, MappingSet **ms)
 ///////////////////////////////////////////////////////////////
 // CompartmentChange is a transform type that is required 
 // for reactions where the only change is in the compartments
-// which is what MCell does for transport across membrane.
-// The only thing that's needed is to change the compartment
-// of a molecule from source to destination. 
+// The only thing changes is the compartment of a molecule from 
+// source to destination. 
 //
 // ASS2019
 // /////////////////////////////////////////////////////////////
-ChangeCompartmentTransform::ChangeCompartmentTransform(string newValue) :
+ChangeCompartmentTransform::ChangeCompartmentTransform(string newCompartmentValue) :
 	Transformation(TransformationFactory::CHANGE_COMPARTMENT)
 {
-	this->newValue = newValue;
+	this->newCompartmentValue = newCompartmentValue;
 }
 void ChangeCompartmentTransform::apply(Mapping *m, MappingSet **ms)
 {
-	m->getMolecule()->setCompartment(newValue);
+	// TODO: It's possible we might have to check origin 
+	// here?
+	m->getMolecule()->setCompartment(newCompartmentValue);
 }
 
 
@@ -331,6 +332,10 @@ NFcore::Transformation * TransformationFactory::genDecrementPopulationTransform(
 	return new DecrementPopulationTransform();
 }
 
+NFcore::Transformation * TransformationFactory::genChangeCompartmentTransform(string newCompartmentValue)
+{
+	return new ChangeCompartmentTransform(newCompartmentValue);
+}
 
 Transformation * TransformationFactory::genLocalFunctionReference(string PointerName, int type, shared_ptr<TemplateMolecule> tm)
 {

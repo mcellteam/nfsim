@@ -96,6 +96,12 @@ namespace NFcore
 			*/
 			bool addDecrementStateTransform(shared_ptr<TemplateMolecule> t, string cName);
 
+			/*!
+			        Adds a compartment change transformation on the TemplateMolecule
+                                TODO: Check for the origin and only change if they match?
+				@author Ali Sinan Saglam
+			*/
+			bool addChangeCompartmentTransform(shared_ptr<TemplateMolecule> t, string oldCompartmentValue, string newCompartmentValue);
 
 			/*!
 				Adds a binding reaction between the two given TemplateMolecules at the specified

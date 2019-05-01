@@ -118,6 +118,13 @@ namespace NFcore
 			*/
 			static Transformation * genDecrementPopulationTransform();
 
+			/*!
+			    ASS2019
+			    Generates a compartment change transformation 
+			    @author Ali Sinan Saglam
+			 */
+			static Transformation * genChangeCompartmentTransform(string newCompartmentValue);
+
 
 			/*! Indicates that a delete transform deletes the entire connected species */
 			static const int COMPLETE_SPECIES_REMOVAL = 0;
@@ -127,11 +134,6 @@ namespace NFcore
 
 			/*! Delete only pointed-to molecules, only if deleting it creates only one remaining species*/
 			static const int DELETE_MOLECULES_NO_KEYWORD = 2;
-
-
-
-
-
 
 			/*!	Indicates a state change transformation or mapping onto a state	*/
 			static const unsigned int STATE_CHANGE = 0;
@@ -154,7 +156,6 @@ namespace NFcore
 
 			/*!	Indicates an increment transformation */
 			static const unsigned int INCREMENT_STATE = 6;
-
 
 			/*!	Indicates a decrement transformation */
 			static const unsigned int DECREMENT_STATE = 7;
@@ -244,12 +245,13 @@ namespace NFcore
 			int newValue;
 	};
 
+	// ASS2019 - Adding ChangeCompartment transformation
 	class ChangeCompartmentTransform : public Transformation {
 		public:
-			ChangeCompartmentTransform(string newValue);
+			ChangeCompartmentTransform(string newCompartmentValue);
 			virtual void apply(Mapping *m, MappingSet **ms);
 		protected:
-			string newValue;
+			string newCompartmentValue;
 	};
 
 	class BindingTransform : public Transformation {

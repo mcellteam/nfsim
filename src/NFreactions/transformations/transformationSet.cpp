@@ -235,6 +235,30 @@ bool TransformationSet::addStateChangeTransform(shared_ptr<TemplateMolecule> t, 
 	return TransformationSet::addStateChangeTransform(t,cName, fStateValue);
 }
 
+// ASS2019
+bool TransformationSet::addChangeCompartmentTransform(shared_ptr<TemplateMolecule> t, string oldCompartmentValue, string newCompartmentValue)
+{
+	if(finalized) { cerr<<"TransformationSet cannot add another transformation once it has been finalized!"<<endl; exit(1); }
+	int reactantIndex = find(t);
+	if(reactantIndex==-1) {
+		cerr<<"Couldn't find the template you gave me!  In transformation set - addChangeCompartmentTransform!\n";
+		cerr<<"Who knows why this is caused and C'thulhu help you if you want to know."<<endl;
+		return false;
+	}
+
+	//// 1) Create a Transformation object to remember the information
+	cout<<"Adding compartment change transform to value: "<<newCompartmentValue<<endl;
+	// ASS2019: you would get the original from here and only run if they match
+	Transformation *transformation = TransformationFactory::genChangeCompartmentTransform(newCompartmentValue);
+
+	//// 2) Add the transformation object to the TransformationSet
+	transformations[reactantIndex].push_back(transformation);
+
+	//// 3) Create a MapGenerator object and add it to the templateMolecule
+	MapGenerator *mg = new MapGenerator(transformations[reactantIndex].size()-1);
+	t->addMapGenerator(mg);
+	return true;
+}
 
 bool TransformationSet::addBindingTransform(shared_ptr<TemplateMolecule> t1, string bSiteName1, shared_ptr<TemplateMolecule> t2, string bSiteName2)
 {
