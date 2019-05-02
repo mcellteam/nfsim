@@ -296,9 +296,11 @@ void NFapi::querySystemStatus(std::string printParam, vector<map<string, string>
         for(auto complex: complexList){
                 
             if(complex->isAlive()){
+		// ASS2019 - Moved getCompartment call up to force to regenerate the label
+		// in case compartments changed
+                complex->getCompartment();
                 map<string, string>* results = new map<string,string>;
                 results->insert(pair<string, string>("label", complex->getCanonicalLabel()));
-                complex->getCompartment();
                 results->insert(pair<string, string>("compartment", complex->getCompartment()->getName()));
                 shared_ptr<DiffusionClass> diffCalculator = dynamic_pointer_cast<DiffusionClass>(complex->getProperty("diffusion_function"));
                 if(diffCalculator){

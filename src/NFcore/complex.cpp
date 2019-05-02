@@ -40,6 +40,9 @@ shared_ptr<Compartment> Complex::getCompartment()
 {
     //lazy calculation of a compartment since it is only used sparingly
     this->updateProperties();
+    // ASS2019 
+    // update the canonical label in case there was a compartment change
+    this->generateCanonicalLabel();
     return (shared_ptr<Compartment>) this->compartment;
 }
 
