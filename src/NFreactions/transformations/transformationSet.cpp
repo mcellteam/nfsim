@@ -247,7 +247,7 @@ bool TransformationSet::addChangeCompartmentTransform(shared_ptr<TemplateMolecul
 	}
 
 	//// 1) Create a Transformation object to remember the information
-	cout<<"Adding compartment change transform to value: "<<newCompartmentValue<<endl;
+	//cout<<"Adding compartment change transform to value: "<<newCompartmentValue<<endl;
 	// ASS2019: you would get the original from here and only run if they match
 	Transformation *transformation = TransformationFactory::genChangeCompartmentTransform(newCompartmentValue);
 

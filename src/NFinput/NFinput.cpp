@@ -2020,11 +2020,8 @@ bool NFinput::initReactionRules(
 					
 					// Working on the actual ChangeCompartment transform here
 					if(!ts->addChangeCompartmentTransform(c.t,source,destination)) {
-						cout << "ASS: failed in adding transformSet for compartment change" << endl;
 						return false;
-					} else {
-						cout << "ASS: success in adding transformSet for compartment change" << endl;
-					}
+					} 
 					//if(verbose) {
 					//	cout<<"\t\t\t***Identified state change of site: "+c->t->getMoleculeTypeName()+"("+c->symPermutationName;
 					//	cout<<") to new state value: " + finalState<<endl;
