@@ -1998,6 +1998,9 @@ bool NFinput::initReactionRules(
                                 //<ListOfOperations>
                                 //  <ChangeCompartment id="RR1_RP1_M1" source="EC" destination="CP" flipOrientation="0" moveConnected="0"/>
                                 //</ListOfOperations>
+				// Please note, we are currently ignoring everything except ID and Destination from the XML operation described. 
+				// TODO: Check origin and modifiy if match
+				// TODO: Figure out what to do with flipOrientation and moveConnected info
 
 				TiXmlElement *pChangeCompartment;
 				for ( pChangeCompartment = pListOfOperations->FirstChildElement("ChangeCompartment"); pChangeCompartment != 0; pChangeCompartment = pChangeCompartment->NextSiblingElement("ChangeCompartment"))
