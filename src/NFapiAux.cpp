@@ -20,8 +20,20 @@ string calculateOriginalCompartment(string referenceSpecies, map<string, string>
 
 
     string speciesCompartment;
-    for(auto it: moleculeIndex){
-        speciesCompartment = originalCompartments[it.second];
+    // For now removing this section to use the nauty string as the source  
+    // for compartment information 
+    
+    // for(auto it: moleculeIndex){
+    //     speciesCompartment = originalCompartments[it.second];
+    // }
+
+    // This section for now will be used to return the compartment
+    for (auto it: moleculeCompartment){
+        // std::cout << "NFapiAux, it.first:" << it.first << " it.second " << it.second << std::endl;
+        // std::cout << "NFapiAux, comparment:" << moleculeCompartment[it.second] << std::endl;
+	speciesCompartment = it.second;
     }
+
+    std::cout << "NFapiAux, string: " <<  referenceSpecies << " returning compartment info: " << speciesCompartment << std::endl;
     return speciesCompartment;
 }
