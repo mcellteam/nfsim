@@ -594,7 +594,7 @@ bool TransformationSet::transform(MappingSet **mappingSets)
 	 * been implemented to check for incorrect molecularity or reaction center conflicts. --Justin
 	 */
 
-
+	
 	// addMolecule transforms are applied before other transforms so the molecules exist
 	//  for potential modification by other transforms.
 	int size = addMoleculeTransformations.size();
@@ -611,6 +611,36 @@ bool TransformationSet::transform(MappingSet **mappingSets)
 			addSpeciesTransformations.at(i)->apply(NULL,NULL);
 		}
 	}
+
+	// ASS2019 - Add default compartment! 
+	string defaultCompartment = "";
+        for(unsigned int r=0; r<getNmappingSets();r++) {
+		MappingSet *ms = mappingSets[r];
+		for(unsigned int t=0; t<transformations[r].size();t++) {
+			Molecule * mol = ms->get(t)->getMolecule();
+			System * sys = mol->getMoleculeType()->getSystem();
+			string compName = mol->getCompartmentName();
+			if(compName != "") {
+			    int dim = sys->getAllCompartments().getCompartment(compName)->getSpatialDimensions();
+			    if(defaultCompartment == "" || dim == 2) {
+			            defaultCompartment = compName;
+			    }
+			}
+		}
+	}	
+	// std::cout << "ASS2019 - Default compartment is : " << defaultCompartment << std::endl;
+        for(unsigned int r=0; r<getNmappingSets();r++) {
+		MappingSet *ms = mappingSets[r];
+		for(unsigned int t=0; t<transformations[r].size();t++) {
+			Molecule * mol = ms->get(t)->getMolecule();
+			 System * sys = mol->getMoleculeType()->getSystem();
+			 string compName = mol->getCompartmentName();
+			 if(compName == "") {
+				 mol->setCompartment(defaultCompartment);
+			 }
+		}
+	}	
+	// ASS2019 - Changes finished
 
 	// loop over reactants and added molecules, apply transforms to each
 	for(unsigned int r=0; r<getNmappingSets(); r++)
