@@ -612,16 +612,24 @@ bool TransformationSet::transform(MappingSet **mappingSets)
 		}
 	}
 
-	// ASS2019 - Add default compartment! 
+	// ASS2019 - Adding default compartment! 
 	string defaultCompartment = "";
         for(unsigned int r=0; r<getNmappingSets();r++) {
+		// First pull the mapping set
 		MappingSet *ms = mappingSets[r];
 		for(unsigned int t=0; t<transformations[r].size();t++) {
+			// get the molecule this transformation points to
 			Molecule * mol = ms->get(t)->getMolecule();
+			// Use the molecule type to get system
 			System * sys = mol->getMoleculeType()->getSystem();
+			// System gives us access to the compartment list, first get compartment name
 			string compName = mol->getCompartmentName();
+			// if defined, use it for default compartment setting
 			if(compName != "") {
+			    // Get dimensionality of the compartment
 			    int dim = sys->getAllCompartments().getCompartment(compName)->getSpatialDimensions();
+			    // if default compartment is not set or this is a 2D compartment, use
+			    // this compartment as default
 			    if(defaultCompartment == "" || dim == 2) {
 			            defaultCompartment = compName;
 			    }
@@ -629,14 +637,18 @@ bool TransformationSet::transform(MappingSet **mappingSets)
 		}
 	}	
 	// std::cout << "ASS2019 - Default compartment is : " << defaultCompartment << std::endl;
+	// Re-looping over the molecules and setting their compartment to the default
         for(unsigned int r=0; r<getNmappingSets();r++) {
 		MappingSet *ms = mappingSets[r];
 		for(unsigned int t=0; t<transformations[r].size();t++) {
 			Molecule * mol = ms->get(t)->getMolecule();
 			 System * sys = mol->getMoleculeType()->getSystem();
 			 string compName = mol->getCompartmentName();
+			 mol->printDetails();
+			 // if compartment is not set, set the default
 			 if(compName == "") {
 				 mol->setCompartment(defaultCompartment);
+				 std::cout << mol->getLabel(-1) << " setting to default" << std::endl;
 			 }
 		}
 	}	
