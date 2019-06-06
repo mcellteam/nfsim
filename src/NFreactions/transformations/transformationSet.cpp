@@ -594,6 +594,37 @@ bool TransformationSet::transform(MappingSet **mappingSets)
 	 * been implemented to check for incorrect molecularity or reaction center conflicts. --Justin
 	 */
 
+	// ASS2019 - First we will get the default compartment from the LHS 
+	string defaultCompartment = "";
+	// a list of molecules to pass to reactant pulling helper function
+	list <Molecule *> reactants;
+	this->getListOfReactants(mappingSets, reactants);
+	// Now we have the reactants, we can loop over to implement our logic
+        for(auto react: reactants) {
+	        // std::cout << "\n####### looping over reactants - start #########" << std::endl;
+		// react->printDetails();
+		// Can get System object from molcule type which can get us the compartment objects
+		System * sys = react->getMoleculeType()->getSystem();
+		// need the compatment name to pull the object
+		string compName = react->getCompartmentName();
+		// std::cout << "compartment is: " << compName << std::endl;
+		// If name is not "" then we can look at the dimensionality
+		if(compName != "") {
+		      // Get dimensionality of the compartment
+		      int dim = sys->getAllCompartments().getCompartment(compName)->getSpatialDimensions();
+		      // if default compartment is not set or this is a 2D compartment, use
+	              // this compartment as default
+		      // std::cout << "dimensionality: " << dim << std::endl;
+		      if(defaultCompartment == "" || dim == 2) {
+		          defaultCompartment = compName;
+		      }
+		}
+	        // std::cout << "\n####### looping over reactants - end #########" << std::endl;
+		// TODO: Implement more logic, like if 2 volume compartments are on the same side
+		// raise a warning
+	}
+	// std::cout << "\n##### default compartment was: " << defaultCompartment << " #######" << std::endl;
+	// ASS2019 - TESTING GETTING LIST OF REACTANTS 
 	
 	// addMolecule transforms are applied before other transforms so the molecules exist
 	//  for potential modification by other transforms.
@@ -612,46 +643,23 @@ bool TransformationSet::transform(MappingSet **mappingSets)
 		}
 	}
 
-	// ASS2019 - Adding default compartment! 
-	string defaultCompartment = "";
-        for(unsigned int r=0; r<getNmappingSets();r++) {
-		// First pull the mapping set
-		MappingSet *ms = mappingSets[r];
-		for(unsigned int t=0; t<transformations[r].size();t++) {
-			// get the molecule this transformation points to
-			Molecule * mol = ms->get(t)->getMolecule();
-			// Use the molecule type to get system
-			System * sys = mol->getMoleculeType()->getSystem();
-			// System gives us access to the compartment list, first get compartment name
-			string compName = mol->getCompartmentName();
-			// if defined, use it for default compartment setting
-			if(compName != "") {
-			    // Get dimensionality of the compartment
-			    int dim = sys->getAllCompartments().getCompartment(compName)->getSpatialDimensions();
-			    // if default compartment is not set or this is a 2D compartment, use
-			    // this compartment as default
-			    if(defaultCompartment == "" || dim == 2) {
-			            defaultCompartment = compName;
-			    }
-			}
-		}
-	}	
-	// std::cout << "ASS2019 - Default compartment is : " << defaultCompartment << std::endl;
-	// Re-looping over the molecules and setting their compartment to the default
-        for(unsigned int r=0; r<getNmappingSets();r++) {
-		MappingSet *ms = mappingSets[r];
-		for(unsigned int t=0; t<transformations[r].size();t++) {
-			Molecule * mol = ms->get(t)->getMolecule();
-			 System * sys = mol->getMoleculeType()->getSystem();
-			 string compName = mol->getCompartmentName();
-			 mol->printDetails();
-			 // if compartment is not set, set the default
-			 if(compName == "") {
-				 mol->setCompartment(defaultCompartment);
-				 std::cout << mol->getLabel(-1) << " setting to default" << std::endl;
-			 }
-		}
-	}	
+	// ASS2019 - Now setting default compartment to added molecules
+	// TODO: Maybe move this to molecule creators instead of re-looping here
+	// Now trying to pull the list of added molecules
+	list <Molecule *> addedProducts;
+	this->getListOfAddedMolecules(mappingSets, addedProducts, 1);
+	for(auto prod: addedProducts) {
+		// std::cout << "\n#### looping over addedProdcts - start ####" << std::endl;
+		// prod->printDetails();
+	        System * sys = prod->getMoleculeType()->getSystem();
+	        string compName = prod->getCompartmentName();
+	        // if compartment is not set, set the default
+	        if(compName == "") {
+	                prod->setCompartment(defaultCompartment);
+	                // std::cout << prod->getLabel(-1) << " setting to default" << std::endl;
+	        }
+		// std::cout << "\n#### looping over addedProdcts - end ####" << std::endl;
+	}
 	// ASS2019 - Changes finished
 
 	// loop over reactants and added molecules, apply transforms to each
@@ -740,6 +748,50 @@ bool TransformationSet::checkMolecularity( MappingSet ** mappingSets )
 }
 
 
+bool TransformationSet::getListOfReactants(MappingSet **mappingSets, list <Molecule *> &reactants)
+{
+	list <Molecule *>::iterator molIter;
+	for(unsigned int r=0; r<n_reactants; r++)
+	{
+	    // For each of the molecules that we possibly affect, traverse the neighborhood
+	    // Q: Is it sufficient to just look at the first mapping?
+	    // A: It should be if the traversal limit is set high enough, at least for
+	    // all standard reactions.  I'm wondering now, though, if it is enough in
+	    // all cases where you would use the connected-to syntax.  I think so, but
+	    // someone should test it.  --michael 9Mar2011
+	    Molecule * molecule = mappingSets[r]->get(0)->getMolecule();
+
+	    // is this molecule already on the product list?
+	    if ( std::find( reactants.begin(), reactants.end(), molecule ) == reactants.end() )
+	    {	// Traverse neighbor and add molecules to list
+	    	molecule->traverseBondedNeighborhood(reactants,1);
+	    }
+	}
+
+	// Next, find added molecules that are treated as populations.
+	//  Populations molecules have to be removed from observables, then incremented,
+	//  and then added back to the observables (Add molecules treated as particles are handled later)
+	vector <AddMoleculeTransform *>::iterator addmol_iter;
+	for ( addmol_iter = addMoleculeTransformations.begin();
+			addmol_iter != addMoleculeTransformations.end();  ++addmol_iter )
+	{
+		// get molecule creator
+		AddMoleculeTransform * addmol = *addmol_iter;
+		if ( !(addmol->isPopulationType()) ) continue;
+
+		// Get the population molecule pointer
+		Molecule * molecule = addmol->get_population_pointer();
+
+		// is this molecule already on the product list?
+		if ( std::find( reactants.begin(), reactants.end(), molecule ) == reactants.end() )
+		{	// Add molecule to list
+			reactants.push_back( molecule );
+		}
+	}
+
+	return true;
+}
+
 bool TransformationSet::getListOfProducts(MappingSet **mappingSets, list <Molecule *> &products, int traversalLimit)
 {
 	//if(!finalized) { cerr<<"TransformationSet cannot apply a transform if it is not finalized!"<<endl; exit(1); }
@@ -749,10 +801,6 @@ bool TransformationSet::getListOfProducts(MappingSet **mappingSets, list <Molecu
 	{
 		// if we are deleting the entire complex, we don't have to track molecules in this complex
 		if (mappingSets[r]->hasSpeciesDeletionTransform()) continue;
-
-		//cout<<"Traversing:"<<endl;
-		//mappingSets[r]->get(0)->getMolecule()->printDetails();
-		//mappingSets[r]->get(0)->getMolecule()->traverseBondedNeighborhood(products,traversalLimit);
 
 		/*
 		 * I thought that making sure we don't go over the same molecule multiple

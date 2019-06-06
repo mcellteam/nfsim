@@ -298,6 +298,12 @@ namespace NFcore
 			 */
 			Molecule * getPopulationPointer( unsigned int r ) const;
 
+			/*!
+			        ASS2019 - Adding a helper function to pull every reactant no matter what 
+			*/
+			bool getListOfReactants(MappingSet **mappingSets, list <Molecule *> &products);
+
+
 			// New general method for handling system
 			bool usingSymmetryFactor() const { return useSymmetryFactor; };
 			double getSymmetryFactor() const { return symmetryFactor; };
