@@ -802,6 +802,10 @@ bool TransformationSet::getListOfProducts(MappingSet **mappingSets, list <Molecu
 		// if we are deleting the entire complex, we don't have to track molecules in this complex
 		if (mappingSets[r]->hasSpeciesDeletionTransform()) continue;
 
+	        //cout<<"Traversing:"<<endl;	
+		//mappingSets[r]->get(0)->getMolecule()->printDetails();	
+		//mappingSets[r]->get(0)->getMolecule()->traverseBondedNeighborhood(products,traversalLimit);
+
 		/*
 		 * I thought that making sure we don't go over the same molecule multiple
 		 * times would make the code faster - but this is rarely used for most rxn
