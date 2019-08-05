@@ -66,6 +66,11 @@ set_target_properties(${PROJECT_NAME}_EXE PROPERTIES OUTPUT_NAME "NFsim")
 
 add_library(${PROJECT_NAME}_static STATIC ${SRC_FILES})
 
+# -- nfsim_static_fpic --
+
+add_library(${PROJECT_NAME}_static_fpic STATIC ${SRC_FILES})
+set_target_properties(${PROJECT_NAME}_static_fpic PROPERTIES POSITION_INDEPENDENT_CODE 1)
+
 # -- nfsim (dynamic) --
 
 add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
