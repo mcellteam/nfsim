@@ -45,11 +45,11 @@ namespace NFapi{
 
     typedef struct numReactantQueryIndex numReactantQueryIndex;
 
-    bool operator<(const numReactantQueryIndex& l, const numReactantQueryIndex& r) {
+    inline bool operator<(const numReactantQueryIndex& l, const numReactantQueryIndex& r) {
      return (l.initMap<r.initMap || (l.initMap==r.initMap && l.options<r.options));
     }
 
-    bool operator==(const numReactantQueryIndex& l, const numReactantQueryIndex& r) {
+    inline bool operator==(const numReactantQueryIndex& l, const numReactantQueryIndex& r) {
      return (l.initMap==r.initMap && l.options==r.options);
     }
 
