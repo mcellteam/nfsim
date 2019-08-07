@@ -1170,7 +1170,6 @@ namespace NFcore
 			static const int DOR2_RXN = 4;
 
 
-
 			ReactionClass(string name, double rate, string baseRateParameterName, TransformationSet *transformationSet, System *s);
 			virtual ~ReactionClass();
 
@@ -1298,6 +1297,9 @@ namespace NFcore
 			*/
 			vector<MappingSet*> symmetricMappingSet;
 			bool comparisonResult;
+
+      bool bindingRxnWarningPrinted;
+
 	};
 
 
