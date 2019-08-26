@@ -183,13 +183,12 @@ ReactionClass::ReactionClass(string name, double baseRate, string baseRateParame
 
 	if(n_reactants==2)
 	{	//If the reactants are of the same type, then we have to make a few special considerations
-		if(!bindingRxnWarningPrinted && reactantTemplates[0]->getMoleculeType()==reactantTemplates[1]->getMoleculeType())
+		if(reactantTemplates[0]->getMoleculeType()==reactantTemplates[1]->getMoleculeType())
 		{
 			cout<<endl;
 			cout<<"Warning! You have a binding rxn (" << name << ") that allows a moleculeType to bind another of the same type."<<endl;
 			cout<<"Make sure that is correct, because this can potentially make long polymers or large aggregates."<<endl;
 			cout<<endl;
-			bindingRxnWarningPrinted = true;
 		}
 	}
 
@@ -260,8 +259,6 @@ ReactionClass::ReactionClass(string name, double baseRate, string baseRateParame
 
 	//set the system as container for this node
 	this->setContainer(s);
-
-	bindingRxnWarningPrinted = false;
 }
 
 
