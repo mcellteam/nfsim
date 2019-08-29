@@ -1022,7 +1022,7 @@ bool NFinput::initStartSpeciesFromCannonicalLabels(
 				int molUid = molIt.first;
 				// Identify the moleculeType if we can (note that this call could potentially kill our code if we can't find the type);
 				MoleculeType *mt = s->getMoleculeTypeByName(molName);
-				//if(verbose) cout<<"\t\t\tIncluding Molecule of type: "<<molName<<" with local id: " << molUid<<endl;
+				cout<<"\t\t\tIncluding Molecule of type: "<<molName<<" with local id: " << molUid<<endl;
 
 				vector <string> usedComponentNames;
 

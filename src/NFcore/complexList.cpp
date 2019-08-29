@@ -48,6 +48,8 @@ int ComplexList::createComplex(Molecule * m)
 	if (!useComplex) return -1;  //Only create complexes if we intend on using them...
 	int c_id = allComplexes.size();
 	Complex * c = new Complex(sys, c_id, m);
+	std::cout << "Added complex\n";
+	c->printDetails();
 	allComplexes.push_back(c);
 	return c_id;
 }

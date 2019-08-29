@@ -64,7 +64,7 @@ ReactionClass::ReactionClass(string name, double baseRate, string baseRateParame
 		tmList.clear(); hasMapGenerator.clear();
 	}
 	mappingSet = new MappingSet *[n_mappingsets];
-
+  memset(mappingSet, 0, sizeof(MappingSet *) * n_mappingsets);
 
 
 	/* create blank mappingSets for the added molecules. These will be used
@@ -314,6 +314,11 @@ void ReactionClass::printDetails() const {
 	{
 		cout<<"      -|"<< this->getReactantCount(r)<<" mappings|\t";
 		cout<<this->reactantTemplates[r]->getPatternString()<<"\n";
+
+		if (mappingSet[r] != nullptr)
+		  mappingSet[r]->printDetails();
+		else
+		  cout << "mappingSet[" << r << "]" << " is null\n";
 		//cout<<"head: "<<endl; this->reactantTemplates[r]->printDetails(cout);
 		//reactantTemplates[r]->printDetails();
 	}
@@ -343,6 +348,10 @@ bool ReactionClass::fire(double random_A_number) {
 	// First randomly pick the reactants to fire by selecting the MappingSets
 	this->pickMappingSets(random_A_number);
 
+  cout<<" X" << (void*)this << "\n";
+  //mappingSet[k]->printDetails();
+  //cout<<" ^X\n";*/
+
 
 	// Check reactants for correct molecularity:
 	if ( ! transformationSet->checkMolecularity(mappingSet) ) {
@@ -351,11 +360,16 @@ bool ReactionClass::fire(double random_A_number) {
 		return false;
 	}
 
+	printDetails();
 
 	// output something if the reaction was tagged
-	if(tagged) {
+	if(true/*tagged*/) {
 		cout<<"#RT "<<this->rxnId<<" "<<this->system->getCurrentTime();
+		cout<<"n_reactants "<<n_reactants<<"\n";
 		for(unsigned int k=0; k<n_reactants; k++) {
+		  cout<<" X\n";
+		  mappingSet[k]->printDetails();
+		  cout<<" ^X\n";
 			cout<<" [";
 			for(unsigned int p=0; p<mappingSet[k]->getNumOfMappings();p++) {
 				Molecule *mForTag = mappingSet[k]->get(p)->getMolecule();
@@ -387,11 +401,11 @@ bool ReactionClass::fire(double random_A_number) {
 
 
 	// display product molecules for debugging..
-	//for( molIter = products.begin(); molIter != products.end(); molIter++ ) {
-	//	cout<<">>molecule: "<<(*molIter)->getMoleculeTypeName()<<endl;
-	//	(*molIter)->printDetails();
-	//	cout<<"<<"<<endl;
-	//}
+	for( molIter = products.begin(); molIter != products.end(); molIter++ ) {
+		cout<<">>molecule: "<<(*molIter)->getMoleculeTypeName()<<endl;
+		(*molIter)->printDetails();
+		cout<<"<<"<<endl;
+	}
 
 
 	// Loop through the products (excluding added molecules) and remove from observables
@@ -563,11 +577,11 @@ bool ReactionClass::fire(double random_A_number) {
 
 
 	// display final product molecules for debugging..
-	//for( molIter = products.begin(); molIter != products.end(); molIter++ ) {
-	//	cout<<">>molecule: "<<(*molIter)->getMoleculeTypeName()<<endl;
-	// 	(*molIter)->printDetails();
-	//  	cout<<"<<"<<endl;
-	//}
+	for( molIter = products.begin(); molIter != products.end(); molIter++ ) {
+		cout<<">>molecule: "<<(*molIter)->getMoleculeTypeName()<<endl;
+	 	(*molIter)->printDetails();
+	  	cout<<"<<"<<endl;
+	}
 
 
 	//Tidy up

@@ -522,9 +522,9 @@ namespace NFcore
 			//vector <Complex * > allComplexes;         /*!< container of all complexes in the simulation */
 			//queue <int> nextAvailableComplex;         /*!< queue tells us which complexes can be used next */
 			vector <Outputter *> allOutputters;    /*!< manages the outputters of the system */
-
+public:
 			ComplexList  allComplexes;                /*!< a container to track all complexes in the system */
-
+protected:
 			CompartmentList allCompartments;		/*!< a contained for all compartments in the system  */
 
 			vector <Observable *> obsToOutput; /*!< keeps ordered list of pointers to observables for output */

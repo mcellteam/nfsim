@@ -232,6 +232,9 @@ bool NFapi::initAndQueryByNumReactant(NFapi::numReactantQueryIndex &query,
 bool NFapi::initAndQuerySystemStatus(NFapi::numReactantQueryIndex &query, 
                                      vector<map<string, string>*> &labelSet)
 {
+  std::cout << "BEFORE initAndQuerySystemStatus\n";
+
+
     //memoization
     //if(NFapi::mSystemQueryDict.find(query) != NFapi::mSystemQueryDict.end()){
     //    labelSet = NFapi::mSystemQueryDict[query];
@@ -240,6 +243,13 @@ bool NFapi::initAndQuerySystemStatus(NFapi::numReactantQueryIndex &query,
         map<string, string> inputCompartments;
         if(!NFapi::resetSystem())
             return false;
+
+        if (NFapi::system != nullptr) {
+          static int cnt = 0;
+          cout << "DUMP " << cnt << "\n";
+          cnt++;
+          //NFapi::system->allComplexes.printAllComplexes();
+        }
 
         if(!NFapi::initSystemNauty(query.initMap))
         {
@@ -273,6 +283,11 @@ bool NFapi::initAndQuerySystemStatus(NFapi::numReactantQueryIndex &query,
         //NFapi::mSystemQueryDict[query] = labelSet;
 
     }
+
+    std::cout << "AFTER initAndQuerySystemStatus\n";
+    if (NFapi::system != nullptr)
+      NFapi::system->allComplexes.printAllComplexes();
+
     return true;
 
 }
@@ -294,6 +309,7 @@ void NFapi::querySystemStatus(std::string printParam, vector<map<string, string>
         const vector<Complex*> complexList = (NFapi::system->getAllComplexes()).getAllComplexesVector();
         
         for(auto complex: complexList){
+          complex->printDetails();
                 
             if(complex->isAlive()){
 		// ASS2019 - Moved getCompartment call up to force to regenerate the label
@@ -336,6 +352,12 @@ bool NFapi::queryObservables(map<std::string, double> &observables){
 
 
 bool NFapi::stepSimulation(const std::string rxnName){
+
+  static int cnt_rx = 0;
+  cout << "RXDUMP " << cnt_rx << ", name: " << rxnName << "\n";
+  NFapi::system->printAllReactions();
+  cnt_rx++;
+
     auto rxn = NFapi::system->getReaction(rxnName);
     //sending a negative number causes the firing function to recalculate the random number used
     //for argument
