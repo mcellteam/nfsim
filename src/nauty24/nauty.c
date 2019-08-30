@@ -241,7 +241,7 @@ nauty(graph *g_arg, int *lab, int *ptn, nset *active_arg,
 {
         int i;
         int numcells;
-	int retval;
+  __attribute__((unused)) int retval;
 	int initstatus;
 #if !MAXN
 	tcnode *tcp,*tcq;
@@ -737,8 +737,8 @@ othernode(int *lab, int *ptn, int level, int numcells)
    /* If children will be required, find new target cell and nset tc to its
       position in lab, tcell to its contents, and tcellsize to its size: */
 
-        if (numcells < n && (eqlev_first == level ||
-                             getcanon && comp_canon >= 0))
+        if (numcells < n && ((eqlev_first == level) ||
+                             (getcanon && (comp_canon >= 0))))
         {
             if (!getcanon || comp_canon < 0)
             {
@@ -881,7 +881,7 @@ processnode(int *lab, int *ptn, int level, int numcells)
                                    (*dispatch.isautom)(g,workperm,digraph,M,n))
                     code = 1;
             }
-            if (code == 0)
+            if (code == 0) {
                 if (getcanon)
                 {
                     sr = 0;
@@ -910,6 +910,7 @@ processnode(int *lab, int *ptn, int level, int numcells)
                 }
                 else
                     code = 4;
+            }
         }
 
         if (code != 0 && level > stats->maxlevel) stats->maxlevel = level;
@@ -1079,7 +1080,7 @@ writemarker(int level, int tv, int index, int tcellsize,
 *****************************************************************************/
 
 void
-nauty_check(int wordsize, int m, int n, int version)
+nauty_check(int wordsize, int m_, int n_, int version)
 {
         if (wordsize != WORDSIZE)
         {
@@ -1088,13 +1089,13 @@ nauty_check(int wordsize, int m, int n, int version)
         }
 
 #if MAXN
-        if (m > MAXM)
+        if (m_ > MAXM)
         {
             fprintf(ERRFILE,"Error: MAXM inadequate in nauty.c\n");
             exit(1);
         }
 
-        if (n > MAXN)
+        if (n_ > MAXN)
         {
             fprintf(ERRFILE,"Error: MAXN inadequate in nauty.c\n");
             exit(1);
@@ -1115,14 +1116,14 @@ nauty_check(int wordsize, int m, int n, int version)
 *****************************************************************************/
 
 void
-extra_autom(permutation *p, int n)
+extra_autom(permutation *p, int n_)
 {
         if (writeautoms)
-            writeperm(outfile,p,cartesian,linelength,n);
-        stats->numorbits = orbjoin(orbits,p,n);
+            writeperm(outfile,p,cartesian,linelength,n_);
+        stats->numorbits = orbjoin(orbits,p,n_);
         ++stats->numgenerators;
         OPTCALL(userautomproc)(stats->numgenerators,p,orbits,
-                                        stats->numorbits,stabvertex,n);
+                                        stats->numorbits,stabvertex,n_);
 }
 
 /*****************************************************************************
@@ -1134,13 +1135,13 @@ extra_autom(permutation *p, int n)
 
 void
 extra_level(int level, int *lab, int *ptn, int numcells, int tv1, int index,
-            int tcellsize, int childcount, int n)
+            int tcellsize, int childcount, int n_)
 {
         MULTIPLY(stats->grpsize1,stats->grpsize2,index);
         if (domarkers)
             writemarker(level,tv1,index,tcellsize,stats->numorbits,numcells);
         OPTCALL(userlevelproc)(lab,ptn,level,orbits,stats,tv1,index,tcellsize,
-                                                        numcells,childcount,n);
+                                                        numcells,childcount,n_);
 }
 
 /*****************************************************************************

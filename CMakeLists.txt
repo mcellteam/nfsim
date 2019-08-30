@@ -2,16 +2,13 @@ cmake_minimum_required(VERSION 2.8.9)
 
 project(NFsim)
 
-#set(CMAKE_BUILD_TYPE Release)
-#set (CMAKE_C_FLAGS "$CMAKE_C_FLAGS -fPIC")
-#set (CMAKE_CXX_FLAGS "$CMAKE_CXX_FLAGS -fPIC")
-
-#add_definitions("-fPIC")
-
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
-
+# disable some safe warnings
+set(DISABLE_WARNINGS_FLAGS " -Wno-write-strings -Wno-unused-variable ")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DISABLE_WARNINGS_FLAGS} ") 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DISABLE_WARNINGS_FLAGS} ")
 
 set(SUB_DIRS
     include/

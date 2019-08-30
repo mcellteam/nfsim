@@ -1318,7 +1318,7 @@ nauty_to_sg(graph *g, sparsegraph *sg, int m, int n)
 	for (i = 0, gi = g; i < n; ++i, gi += m)
 	{
 	    v[i] = j;
-	    di = 0;
+	    //di = 0;
 	    for (k = -1; (k = nextelement(gi,m,k)) >= 0; )
 		e[j++] = k;
 	    d[i] = j - v[i];
