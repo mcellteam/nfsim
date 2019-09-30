@@ -5,8 +5,8 @@ project(NFsim)
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
-# disable some safe warnings
-set(DISABLE_WARNINGS_FLAGS " -Wno-write-strings -Wno-unused-variable ")
+# disable some safe warnings (-Wno-shadow is not safe and should be removed)
+set(DISABLE_WARNINGS_FLAGS " -Wno-shadow -Wno-write-strings -Wno-unused-variable ")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DISABLE_WARNINGS_FLAGS} ") 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DISABLE_WARNINGS_FLAGS} ")
 
