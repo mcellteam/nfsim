@@ -12,8 +12,8 @@ endif()
 
 # disable some safe warnings (-Wno-shadow is not safe and should be removed)
 set(DISABLE_WARNINGS_FLAGS " -Wno-shadow -Wno-write-strings -Wno-unused-variable ")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DISABLE_WARNINGS_FLAGS} ") 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DISABLE_WARNINGS_FLAGS} ")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${BOOST_INCLUDE} ${DISABLE_WARNINGS_FLAGS} ") 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${BOOST_INCLUDE} ${DISABLE_WARNINGS_FLAGS} ")
 
 set(SUB_DIRS
     include/
