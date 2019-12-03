@@ -5,10 +5,8 @@ project(NFsim)
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
-if (APPLE)
-    # TODO: determine this automatically
-    set(BOOST_INCLUDE "-isystem /usr/local/Cellar/boost/1.71.0/include")
-endif()  
+set(BOOST_INCLUDE "-isystem ${CMAKE_SOURCE_DIR}/libs")
+  
 
 # disable some safe warnings (-Wno-shadow is not safe and should be removed)
 set(DISABLE_WARNINGS_FLAGS " -Wno-shadow -Wno-write-strings -Wno-unused-variable ")
