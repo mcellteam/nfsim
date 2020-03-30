@@ -8,10 +8,18 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 set(BOOST_INCLUDE "-isystem ${CMAKE_SOURCE_DIR}/libs")
   
 
-# disable some safe warnings (-Wno-shadow is not safe and should be removed)
-set(DISABLE_WARNINGS_FLAGS " -Wno-shadow -Wno-write-strings -Wno-unused-variable ")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${BOOST_INCLUDE} ${DISABLE_WARNINGS_FLAGS} ") 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${BOOST_INCLUDE} ${DISABLE_WARNINGS_FLAGS} ")
+# disable some warnings, not neccesarily safe ones, but we do not expect any firther modifications to nfsim from our side
+set(DISABLE_WARNINGS_FLAGS_C_CXX 
+    "-Wno-return-type -Wno-shadow -Wno-sign-compare -Wno-write-strings -Wno-unused-variable -Wno-maybe-uninitialized -Wno-type-limits -Wno-sequence-point -Wno-strict-aliasing -Wno-extra -Wmisleading-indentation -Wno-unused-but-set-variable -Wno-misleading-indentation "
+)
+    
+set(DISABLE_WARNINGS_FLAGS_CXX 
+    "${DISABLE_WARNINGS_FLAGS_C_CXX} -Wno-delete-non-virtual-dtor -Wno-reorder "
+)
+    
+    
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${BOOST_INCLUDE} ${DISABLE_WARNINGS_FLAGS_C_CXX} ") 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${BOOST_INCLUDE} ${DISABLE_WARNINGS_FLAGS_CXX} ")
 
 set(SUB_DIRS
     include/
