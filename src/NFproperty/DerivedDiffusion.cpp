@@ -37,7 +37,7 @@ double DerivedDiffusion::getDiffusionValue(){
             subunits3D.push_back(diffusion->getDiffusionValue());
     }
 
-    cout<<endl<<endl<<"##### In DerivedDiffusion #####"<<endl<<endl;
+    // cout<<endl<<endl<<"##### In DerivedDiffusion #####"<<endl<<endl;
     
     // If complex contains any 2D subunits then the whole complex is considered to be a surface complex.
     //   In this case combine only the 2D subunits to derive the 2D diffusion constant

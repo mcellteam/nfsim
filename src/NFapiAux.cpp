@@ -34,6 +34,6 @@ string calculateOriginalCompartment(string referenceSpecies, map<string, string>
 	speciesCompartment = it.second;
     }
 
-    std::cout << "NFapiAux, string: " <<  referenceSpecies << " returning compartment info: " << speciesCompartment << std::endl;
+    // std::cout << "NFapiAux, string: " <<  referenceSpecies << " returning compartment info: " << speciesCompartment << std::endl;
     return speciesCompartment;
 }
