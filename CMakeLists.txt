@@ -10,7 +10,7 @@ set(BOOST_INCLUDE "-isystem ${CMAKE_SOURCE_DIR}/libs")
 
 # disable some warnings, not neccesarily safe ones, but we do not expect any firther modifications to nfsim from our side
 set(DISABLE_WARNINGS_FLAGS_C_CXX 
-    "-Wno-return-type -Wno-shadow -Wno-sign-compare -Wno-write-strings -Wno-unused-variable -Wno-maybe-uninitialized -Wno-type-limits -Wno-sequence-point -Wno-strict-aliasing -Wno-extra -Wmisleading-indentation -Wno-unused-but-set-variable -Wno-misleading-indentation "
+    "-Wno-return-type -Wno-shadow -Wno-sign-compare -Wno-write-strings -Wno-unused-variable -Wno-maybe-uninitialized -Wno-type-limits -Wno-sequence-point -Wno-strict-aliasing -Wno-extra -Wno-unused-but-set-variable -Wno-misleading-indentation "
 )
     
 set(DISABLE_WARNINGS_FLAGS_CXX 
