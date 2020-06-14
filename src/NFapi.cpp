@@ -301,7 +301,12 @@ void NFapi::querySystemStatus(std::string printParam, vector<map<string, string>
                 complex->getCompartment();
                 map<string, string>* results = new map<string,string>;
                 results->insert(pair<string, string>("label", complex->getCanonicalLabel()));
-                results->insert(pair<string, string>("compartment", complex->getCompartment()->getName()));
+                if (complex->getCompartment() != nullptr) {
+                  results->insert(pair<string, string>("compartment", complex->getCompartment()->getName()));
+                }
+                else {
+                  results->insert(pair<string, string>("compartment", ""));
+                }
                 shared_ptr<DiffusionClass> diffCalculator = dynamic_pointer_cast<DiffusionClass>(complex->getProperty("diffusion_function"));
                 if(diffCalculator){
                     string value = doubleToString(diffCalculator->getDiffusionValue());
