@@ -301,7 +301,7 @@ void NFapi::querySystemStatus(std::string printParam, vector<map<string, string>
                 complex->getCompartment();
                 map<string, string>* results = new map<string,string>;
                 results->insert(pair<string, string>("label", complex->getCanonicalLabel()));
-                if (complex->getCompartment() != nullptr) {
+                if (complex->getCompartment().use_count() != 0) {
                   results->insert(pair<string, string>("compartment", complex->getCompartment()->getName()));
                 }
                 else {

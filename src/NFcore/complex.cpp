@@ -47,7 +47,7 @@ shared_ptr<Compartment> Complex::getCompartment()
 }
 
 HierarchicalNode* Complex::getContainer(){
-    if(this->getCompartment())
+    if(this->getCompartment().use_count() != 0)
         this->setContainer(this->getCompartment().get());
     else
         this->setContainer(this->system);
