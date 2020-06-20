@@ -177,16 +177,23 @@ map<string, string> NFapi::extractSpeciesCompartmentMapFromNauty(const std::stri
     for(auto it:moleculeCompartment){
         auto temp = getCompartmentInformation(it.second);
 
-        if(temp->getSpatialDimensions() == 2){
-            finalCompartment = temp;
-        }
-        else if(finalCompartment == nullptr){
-            finalCompartment = temp;
+        if (temp.use_count() != 0) {
+          if(temp->getSpatialDimensions() == 2){
+              finalCompartment = temp;
+          }
+          else if(finalCompartment == nullptr){
+              finalCompartment = temp;
+          }
         }
     }
 
     for(auto it: moleculeIndex){
+      if (finalCompartment.use_count() != 0) {
         speciesCompartmentMap[it.second] = finalCompartment->getName();
+      }
+      else {
+        speciesCompartmentMap[it.second] = "";
+      }
     }
     return speciesCompartmentMap;
 }

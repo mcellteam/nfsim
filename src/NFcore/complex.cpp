@@ -64,7 +64,12 @@ void Complex::updateProperties()
     for(auto mol: complexMembers){
         tmp = this->system->getAllCompartments().getCompartment(mol->getCompartmentName());
         if(!tmp)
-            return;
+            return; // probably incorrect check
+
+        if(tmp.use_count() == 0) {
+            continue; // not sure if correct handling wrt to the check above
+        }
+
         if(tmp->getSpatialDimensions() == 2 || referenceMolecule == nullptr){
             referenceMolecule = mol;
             referenceCompartment = tmp;
@@ -72,14 +77,16 @@ void Complex::updateProperties()
 
     }
 
-    this->compartment = referenceCompartment;
-    auto diffusion = referenceMolecule->getProperty("diffusion_function");
-    if(diffusion){
-        //you have a new parent!
-        auto diffusionProperty = diffusion->getDerivedProperty();
-        diffusionProperty->setContainer(this);
+    if (referenceMolecule != nullptr) {
+      this->compartment = referenceCompartment;
+      auto diffusion = referenceMolecule->getProperty("diffusion_function");
+      if(diffusion.use_count() != 0){
+          //you have a new parent!
+          auto diffusionProperty = diffusion->getDerivedProperty();
+          diffusionProperty->setContainer(this);
 
-        this->addProperty(diffusionProperty);
+          this->addProperty(diffusionProperty);
+      }
     }
 }
 
