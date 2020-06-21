@@ -63,14 +63,8 @@ void Complex::updateProperties()
     shared_ptr<Compartment> tmp = nullptr;
     for(auto mol: complexMembers){
         tmp = this->system->getAllCompartments().getCompartment(mol->getCompartmentName());
-        if(!tmp)
-            return; // probably incorrect check
 
-        if(tmp.use_count() == 0) {
-            continue; // not sure if correct handling wrt to the check above
-        }
-
-        if(tmp->getSpatialDimensions() == 2 || referenceMolecule == nullptr){
+        if((tmp.use_count() != 0 && tmp->getSpatialDimensions() == 2) || referenceMolecule == nullptr){
             referenceMolecule = mol;
             referenceCompartment = tmp;
         }
