@@ -33,6 +33,13 @@
 #define DEBUG 0   			// Set to 1 to display all debug messages
 #define BASIC_MESSAGE 0		// Set to 1 to display basic messages (eg runtime)
 
+// MCELL4 development flag
+// for some reason, although double is used everywhere,
+// string are converted using stof and this leads to big numerical errors
+// so far used only for diffusion contant
+// kept as macro because different result is produced
+#define MCELL4_USE_STOD
+
 // debug nauty?
 #define DEBUG_NAUTY 0
 
