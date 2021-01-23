@@ -58,6 +58,8 @@ bool CompartmentList::addCompartment(string name, int dimensions, double size, s
     shared_ptr<Compartment> compartment = make_shared<Compartment>(name, dimensions, size, outside);
     compartment->setContainer(sys);
     this->addCompartment(compartment);
+
+    return true;
 }
 
 //compartment initialization method

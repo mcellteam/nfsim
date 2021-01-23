@@ -64,6 +64,9 @@
 //
 //---------------------------------------------------------------------------
 
+#if defined(_MSC_VER)
+#define auto_ptr unique_ptr
+#endif
 
 #if defined(_MSC_VER) && _MSC_VER==1200
 

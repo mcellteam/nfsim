@@ -12,8 +12,8 @@ it is necessary to check they are correct.
 ====================================================================*/
 
 /* Check whether various headers are available */
-#define HAVE_UNISTD_H  1    /* <unistd.h> */
-#define HAVE_SYSTYPES_H  1    /* <sys/types.h> */
+#define HAVE_UNISTD_H  0    /* <unistd.h> */
+#define HAVE_SYSTYPES_H  0    /* <sys/types.h> */
 #define HAVE_STDDEF_H  1     /* <stddef.h> */
 #define HAVE_STDLIB_H  1    /* <stdlib.h> */
 #define HAVE_STRING_H  1    /* <string.h> */
@@ -977,9 +977,15 @@ setword bit[] = {0100000,040000,020000,010000,04000,02000,01000,0400,0200,
                  0100,040,020,010,04,02,01};
 #endif
 
+#ifdef _MSC_VER
+#define ATTR_UNUSED
+#else
+#define ATTR_UNUSED __attribute__((unused))
+#endif
+
     /*  array giving number of 1-bits in bytes valued 0..255: */
 EXTDEF_CLASS
-__attribute__((unused)) int bytecount[] = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,
+ATTR_UNUSED int bytecount[] = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,
                    1,2,2,3,2,3,3,4,2,3,3,4,3,4,4,5,
                    1,2,2,3,2,3,3,4,2,3,3,4,3,4,4,5,
                    2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,
@@ -998,7 +1004,7 @@ __attribute__((unused)) int bytecount[] = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,
 
     /* array giving position (1..7) of high-order 1-bit in byte: */
 EXTDEF_CLASS
-__attribute__((unused)) int leftbit[] =   {8,7,6,6,5,5,5,5,4,4,4,4,4,4,4,4,
+ATTR_UNUSED int leftbit[] =   {8,7,6,6,5,5,5,5,4,4,4,4,4,4,4,4,
                    3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
                    2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
                    2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,

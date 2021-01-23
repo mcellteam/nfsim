@@ -2860,6 +2860,7 @@ bool NFinput::setReactionRuleExtendedProperties(ReactionClass* rxn, map<string,w
 
 	//add other reaction properties later
 
+	return true;
 }
 
 

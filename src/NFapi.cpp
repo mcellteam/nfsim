@@ -99,6 +99,8 @@ bool NFapi::resetSystem(){
 bool NFapi::deleteSystem(){
     if(NFapi::system != NULL)
         delete NFapi::system;
+
+    return true;
 }
 
 bool NFapi::initSystemXML(const string initXML){
@@ -363,9 +365,12 @@ bool NFapi::stepSimulation(const std::string rxnName){
     if(retry == 0)
         return false;
     return true;*/
+
+    return true;
 }
 
 bool NFapi::stepSimulation(){
     NFapi::system->singleStep();
 
+    return true;
 }

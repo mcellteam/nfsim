@@ -4,6 +4,10 @@
 #ifndef NFCORE_HH_
 #define NFCORE_HH_
 
+#ifdef _MSC_VER
+#pragma warning (disable: 4267)
+#endif
+
 //Include stl IO and string functionality
 #include <iostream>
 #include <fstream>
