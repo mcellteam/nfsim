@@ -74,9 +74,7 @@ set_target_properties(${PROJECT_NAME}_EXE PROPERTIES OUTPUT_NAME "NFsim")
 endif()
 
 # -- nfsim_static --
-if (NOT WIN32)
 add_library(${PROJECT_NAME}_static STATIC ${SRC_FILES})
-endif()
 # -- nfsim_static_fpic --
 
 add_library(${PROJECT_NAME}_static_fpic STATIC ${SRC_FILES})
