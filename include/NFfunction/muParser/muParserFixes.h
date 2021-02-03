@@ -64,7 +64,7 @@
 //
 //---------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined(__APPLE__)
 #define auto_ptr unique_ptr
 #endif
 
