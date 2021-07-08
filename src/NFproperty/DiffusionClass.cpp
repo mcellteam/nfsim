@@ -17,7 +17,11 @@ void ConstantDiffusion::getValue(string& value){
 }
 
 double ConstantDiffusion::getDiffusionValue(){
+#ifndef MCELL4_USE_STOD
     return stof(this->value);
+#else
+    return stod(this->value);
+#endif
 }
 
 

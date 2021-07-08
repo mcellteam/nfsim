@@ -28,7 +28,13 @@ CompartmentList::~CompartmentList()
 
 shared_ptr<Compartment> CompartmentList::getCompartment(string name)
 {
-    return compartmentList.find(name)->second;
+  auto it = compartmentList.find(name);
+  if (it != compartmentList.end()) {
+    return it->second;
+  }
+  else {
+    return shared_ptr<Compartment>(nullptr);
+  }
 }
 
 void CompartmentList::getCompartmentChildren(string name, vector<shared_ptr<Compartment>> &children){
@@ -52,6 +58,8 @@ bool CompartmentList::addCompartment(string name, int dimensions, double size, s
     shared_ptr<Compartment> compartment = make_shared<Compartment>(name, dimensions, size, outside);
     compartment->setContainer(sys);
     this->addCompartment(compartment);
+
+    return true;
 }
 
 //compartment initialization method

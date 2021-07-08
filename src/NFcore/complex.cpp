@@ -47,7 +47,7 @@ shared_ptr<Compartment> Complex::getCompartment()
 }
 
 HierarchicalNode* Complex::getContainer(){
-    if(this->getCompartment())
+    if(this->getCompartment().use_count() != 0)
         this->setContainer(this->getCompartment().get());
     else
         this->setContainer(this->system);
@@ -63,23 +63,24 @@ void Complex::updateProperties()
     shared_ptr<Compartment> tmp = nullptr;
     for(auto mol: complexMembers){
         tmp = this->system->getAllCompartments().getCompartment(mol->getCompartmentName());
-        if(!tmp)
-            return;
-        if(tmp->getSpatialDimensions() == 2 || referenceMolecule == nullptr){
+
+        if((tmp.use_count() != 0 && tmp->getSpatialDimensions() == 2) || referenceMolecule == nullptr){
             referenceMolecule = mol;
             referenceCompartment = tmp;
         }
 
     }
 
-    this->compartment = referenceCompartment;
-    auto diffusion = referenceMolecule->getProperty("diffusion_function");
-    if(diffusion){
-        //you have a new parent!
-        auto diffusionProperty = diffusion->getDerivedProperty();
-        diffusionProperty->setContainer(this);
+    if (referenceMolecule != nullptr) {
+      this->compartment = referenceCompartment;
+      auto diffusion = referenceMolecule->getProperty("diffusion_function");
+      if(diffusion.use_count() != 0){
+          //you have a new parent!
+          auto diffusionProperty = diffusion->getDerivedProperty();
+          diffusionProperty->setContainer(this);
 
-        this->addProperty(diffusionProperty);
+          this->addProperty(diffusionProperty);
+      }
     }
 }
 

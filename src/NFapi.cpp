@@ -99,6 +99,8 @@ bool NFapi::resetSystem(){
 bool NFapi::deleteSystem(){
     if(NFapi::system != NULL)
         delete NFapi::system;
+
+    return true;
 }
 
 bool NFapi::initSystemXML(const string initXML){
@@ -177,16 +179,23 @@ map<string, string> NFapi::extractSpeciesCompartmentMapFromNauty(const std::stri
     for(auto it:moleculeCompartment){
         auto temp = getCompartmentInformation(it.second);
 
-        if(temp->getSpatialDimensions() == 2){
-            finalCompartment = temp;
-        }
-        else if(finalCompartment == nullptr){
-            finalCompartment = temp;
+        if (temp.use_count() != 0) {
+          if(temp->getSpatialDimensions() == 2){
+              finalCompartment = temp;
+          }
+          else if(finalCompartment == nullptr){
+              finalCompartment = temp;
+          }
         }
     }
 
     for(auto it: moleculeIndex){
+      if (finalCompartment.use_count() != 0) {
         speciesCompartmentMap[it.second] = finalCompartment->getName();
+      }
+      else {
+        speciesCompartmentMap[it.second] = "";
+      }
     }
     return speciesCompartmentMap;
 }
@@ -301,7 +310,12 @@ void NFapi::querySystemStatus(std::string printParam, vector<map<string, string>
                 complex->getCompartment();
                 map<string, string>* results = new map<string,string>;
                 results->insert(pair<string, string>("label", complex->getCanonicalLabel()));
-                results->insert(pair<string, string>("compartment", complex->getCompartment()->getName()));
+                if (complex->getCompartment().use_count() != 0) {
+                  results->insert(pair<string, string>("compartment", complex->getCompartment()->getName()));
+                }
+                else {
+                  results->insert(pair<string, string>("compartment", ""));
+                }
                 shared_ptr<DiffusionClass> diffCalculator = dynamic_pointer_cast<DiffusionClass>(complex->getProperty("diffusion_function"));
                 if(diffCalculator){
                     string value = doubleToString(diffCalculator->getDiffusionValue());
@@ -351,9 +365,12 @@ bool NFapi::stepSimulation(const std::string rxnName){
     if(retry == 0)
         return false;
     return true;*/
+
+    return true;
 }
 
 bool NFapi::stepSimulation(){
     NFapi::system->singleStep();
 
+    return true;
 }

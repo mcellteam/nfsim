@@ -611,7 +611,12 @@ bool TransformationSet::transform(MappingSet **mappingSets)
 		// If name is not "" then we can look at the dimensionality
 		if(compName != "") {
 		      // Get dimensionality of the compartment
-		      int dim = sys->getAllCompartments().getCompartment(compName)->getSpatialDimensions();
+
+		      int dim = 3;
+		      auto ptr = sys->getAllCompartments().getCompartment(compName);
+		      if (ptr.use_count() != 0) {
+		        dim = sys->getAllCompartments().getCompartment(compName)->getSpatialDimensions();
+		      }
 		      // if default compartment is not set or this is a 2D compartment, use
 	              // this compartment as default
 		      // std::cout << "dimensionality: " << dim << std::endl;

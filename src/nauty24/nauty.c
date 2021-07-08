@@ -239,9 +239,9 @@ nauty(graph *g_arg, int *lab, int *ptn, nset *active_arg,
       int *orbits_arg, optionblk *options, statsblk *stats_arg,
       nset *ws_arg, int worksize, int m_arg, int n_arg, graph *canong_arg)
 {
-        int i;
-        int numcells;
-  __attribute__((unused)) int retval;
+    int i;
+    int numcells;
+    int retval;
 	int initstatus;
 #if !MAXN
 	tcnode *tcp,*tcq;
